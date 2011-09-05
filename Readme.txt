@@ -1,0 +1,11 @@
+Once you have cloned this Repo to your local import it as a git project into Eclipse
+
+Copy the debug files into the ../Blender Folder
+These will hook up Eclipse's Pydev Debug to Blender's debugger.
+
+Open the Run.py and replace the strings:
+1: module main file to be executed.
+2: python debugger location.
+
+Start the Pydev debug server and switch to debug mode.
+Open the .blend file, then open the run.py in the text editor.
