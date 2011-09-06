@@ -1,3 +1,9 @@
+Usage Description:
+Adds the Destructive Modifier that was featured in Blender 2.4.x
+
+The script is located in the ./src folder, copy this to /Blender/scripts/addons
+
+Development:
 Once you have cloned this Repo to your local import it as a git project into Eclipse
 
 Copy the debug files into the ../Blender Folder
