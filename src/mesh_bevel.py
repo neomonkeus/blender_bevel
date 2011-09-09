@@ -53,45 +53,29 @@ class Bevel(bpy.types.Operator):
     def poll(cls, context):
         return(context.mode == "EDIT_MESH")
     
-    def bevel(obj, width): 
-        """Bevels selected edges of the mesh
-            Arguments:
-                @obj (Object): An object with a mesh, with selected edges
-                @width (Float): The degree of bevel.
-            This function should only be called in Edit Mode.
-        """
-        #assign weights
-        for edge in obj.data.edges:
-            if edge.select:
-                edge.bevel_weight = 1.0
-        
-        bpy.ops.object.editmode_toggle()
-        bpy.ops.object.modifier_apply(apply_as = 'DATA', modifier = bevel.name)
     
-        ''' clears the bevel weights for the selected edges'''
-        #reset weights
-        for edge in obj.data.edges:
-            if edge.select:
-                edge.bevel_weight = 0.0
     
     def modal(self, context, event):
         if event.type == 'MOUSEMOVE':  # Apply
             newvalue = event.mouse_x
-            difference = newvalue - self.PREV_POS_VAL
+            print("Mouse x:" + str(newvalue))
+            difference = (newvalue - self.PREV_POS_VAL)/100.0
+            print("Diff: " + str(difference))
             self.BEVEL_MODIFIER.width = self.BEVEL_MODIFIER.width + difference
+            print("Mod Width: " + str(self.BEVEL_MODIFIER.width))
             self.PREV_POS_VAL = newvalue
         elif event.type == 'LEFTMOUSE':  # Confirm
             #self.execute(context)
             return {'FINISHED'}
         elif event.type in ('RIGHTMOUSE', 'ESC'):  # Cancel
-            #obj = context.active_object
-            #if obj.modifiers[0] == BEVEL_NAME:
-            #    obj.modifiers.remove(obj.modifiers[0])
+            obj = context.active_object
+            if obj.modifiers[0] == self.BEVEL_MODIFIER.name:
+                obj.modifiers.remove(obj.modifiers[0])
             return {'CANCELLED'}
         return {'RUNNING_MODAL'}
     
     def invoke(self, context, event):
-        print("in invoke()")
+        print("Invoke() called")
         
         #refresh data:
         bpy.ops.object.editmode_toggle()       
@@ -123,7 +107,7 @@ class Bevel(bpy.types.Operator):
             self.BEVEL_MODIFIER.edge_weight_method = 'LARGEST'
             
             #move modifier to top of the list
-            while obj.modifiers[0] != self.BEVEL_MODIFIERw:
+            while obj.modifiers[0] != self.BEVEL_MODIFIER:
                 bpy.ops.object.modifier_move_up(modifier = self.BEVEL_MODIFIER.name)
                 
             print(context.window_manager.modal_handler_add(self))
@@ -138,7 +122,28 @@ class Bevel(bpy.types.Operator):
 
         context.scene[self.LAST_WIDTH_USED] = self.width
         return('FINISHED')
+
+def bevel(obj, width):
+    """Bevels selected edges of the mesh
+        Arguments:
+            @obj (Object): An object with a mesh, with selected edges
+            @width (Float): The degree of bevel.
+        This function should only be called in Edit Mode.
+    """
+    #assign weights
+    for edge in obj.data.edges:
+        if edge.select:
+            edge.bevel_weight = 1.0
     
+    bpy.ops.object.editmode_toggle()
+    bpy.ops.object.modifier_apply(apply_as = 'DATA', modifier = bevel.name)
+
+    ''' clears the bevel weights for the selected edges'''
+    #reset weights
+    for edge in obj.data.edges:
+        if edge.select:
+            edge.bevel_weight = 0.0
+
 def menu_draw(self, context):
     self.layout.operator_context = 'INVOKE_REGION_WIN'
     self.layout.operator(Bevel.bl_idname, "Bevel")
