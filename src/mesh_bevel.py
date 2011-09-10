@@ -2,7 +2,7 @@
 bl_info = {
            "name": "Bevel",
            "author": "Witold Jaworski, Gerard Moran",
-           "version": (1, 0, 0),
+           "version": (1, 0, 1),
            "blender": (2, 5, 9),
            "api": 39307,
            "location": "View3D -> Edit Mode -> Special (W-key)",
