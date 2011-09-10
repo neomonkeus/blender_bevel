@@ -69,13 +69,13 @@ class Bevel(bpy.types.Operator):
             return {'FINISHED'}
         elif event.type in ('RIGHTMOUSE', 'ESC'):  # Cancel
             obj = context.active_object
-            if obj.modifiers[0] == self.BEVEL_MODIFIER.name:
-                obj.modifiers.remove(obj.modifiers[0])
+            self.BEVEL_MODIFIER = None
+            obj.modifiers.remove(obj.modifiers[0])
             bpy.ops.object.editmode_toggle()
             bpy.ops.object.editmode_toggle()
             print("Deleted Modifier")
             for edge in obj.data.edges:
-                 print("Init values for weights:")
+                 print("Weight Values after deletion:")
                  print(edge.bevel_weight)
             return {'CANCELLED'}
         return {'RUNNING_MODAL'}
@@ -146,6 +146,8 @@ def add_bevel_weights(obj):
     for edge in obj.data.edges:
         if edge.select:
             edge.bevel_weight = 1.0
+    bpy.ops.object.editmode_toggle()
+    bpy.ops.object.editmode_toggle()  
 
 def remove_bevel_weights(obj):
     ''' 
