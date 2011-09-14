@@ -8,6 +8,7 @@ Once you have cloned this Repo to your local import it as a git project into Ecl
 
 Copy the debug files into the ../Blender Folder
 These will hook up Eclipse's Pydev Debug to Blender's debugger.
+Run refresh_python_api.bat to generate the bpy api for the current Blender rev.
 
 Open the Run.py and replace the strings:
 1: module main file to be executed.
